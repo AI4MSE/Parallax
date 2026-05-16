@@ -8,6 +8,7 @@
 # 允许目录结构
 !.gitignore
 !README.md
+!README_CHS.md
 !skills/
 !skills/**/
 !skills/**/*.md

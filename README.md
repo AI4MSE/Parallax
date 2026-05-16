@@ -23,10 +23,10 @@ Want to understand why? Keep reading.
 
 <img src="assets/four_dimensions.png" width="100%">
 
-**Model** lets the Agent think. **Tools** let it act. **Harness** keeps it running.
+**Model** lets the Agent think. **Tools** let it act. **Harness** keeps it running iteratively to the goal.
 **Parallax makes sure it gets things right.**
 
-Model 让 Agent 能思考。Tools 让它能行动。Harness 让它跑得稳。**Parallax 让它做得对。**
+Model 让 Agent 能思考。Tools 让它能行动。Harness 让它迭代跑向目标。**Parallax 让它做得对。**
 
 ---
 
@@ -42,7 +42,7 @@ This isn't your fault. It's an architecture problem.
 
 ### Self-Review Doesn't Work
 
-You've definitely had this experience: you finish writing something, read it three times, think it's perfect — send it to a friend, and they spot a typo in the first glance.
+You've definitely had this experience: you finish writing something, read it three times, think it's perfect — send it to a friend, and they spot a typo at first glance.
 
 AI has the same problem, only worse.
 
@@ -96,7 +96,7 @@ As the Song dynasty poet Su Shi wrote nearly a thousand years ago:
 
 ### Stones from Other Mountains Polish Jade (他山之石，可以攻玉)
 
-This phrase comes from the *Book of Songs* (《诗经》), summarized by the Chinese roughly three thousand years ago. The commentator Zhu Xi put it best:
+This phrase comes from the *Book of Songs* (《诗经》), compiled in China roughly three thousand years ago. The commentator Zhu Xi put it best:
 
 > **两玉相磨不可以成器，以石磨之，然后玉之为器，得以成焉。**
 >
@@ -178,7 +178,7 @@ Theory covered; now for practice. Here are common AI Agent failure modes, and ho
 
 These are just manifestations of the Parallax idea in specific scenarios — far from the whole picture. The core is one sentence: **find someone standing in a different position to take a look.** How and when, depends on your scenario.
 
-This isn't an entirely new idea. In 2018, Irving et al. proposed a similar insight from an AI safety angle: have two AIs debate while a human judges — "lying is harder than refuting a lie" [9]. Parallax tries to integrate such insights into an actionable engineering framework.
+This isn't an entirely new idea. In 2018, Irving et al. proposed a similar insight from an AI safety angle: have two AIs debate while a human judges — the idea that lying is harder than refuting a lie [9]. Parallax tries to integrate such insights into an actionable engineering framework.
 
 ---
 
