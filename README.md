@@ -10,7 +10,7 @@
 >
 > AI Agent 自己写完自己检查，就像学生批改自己的作业——永远觉得都对。
 
-**Parallax** (from Greek *parallaxis*: para- "beside" + allassein "to change" — you see things differently because you're standing in a different place) **is a simple idea: break it down, then have someone else look. Have someone else look at every piece.**
+**Parallax** — literally "apparent shift in position when viewed from different angles" (from Greek *parallaxis*: para- "beside" + allassein "to change") **is a simple idea: break it down, then have someone else look. Have someone else look at every piece.**
 
 **先拆开，再找外人看。每一块都找外人看。**
 
