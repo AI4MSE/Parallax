@@ -1,6 +1,6 @@
 # Parallax Is All You Need?
 
-[![GitHub stars](https://img.shields.io/github/stars/AI4MSE/Parallax?style=social)](https://github.com/AI4MSE/Parallax)
+[![GitHub stars](https://img.shields.io/github/stars/AI4MSE/Parallax?style=social)](https://github.com/AI4MSE/Parallax) **点个 Star 支持一下 · Star ⭐ to support**
 
 **他山之石，可以攻玉：如何让你的 AI Agent 更加可靠**
 
@@ -310,9 +310,9 @@ Parallax 不是万能的。有两个边界条件值得坦诚说明：
 
 ---
 
-如果觉得有用，点个 ⭐ Star 支持一下，也方便更多人看到。
+如果觉得有用，[⭐ 点个 Star](https://github.com/AI4MSE/Parallax) 支持一下，也方便更多人看到。
 
-If this framework helps you, consider giving it a ⭐ — it helps others discover it too.
+If this framework helps you, [⭐ Star this repo](https://github.com/AI4MSE/Parallax) — it helps others discover it too.
 
 ## Author
 
