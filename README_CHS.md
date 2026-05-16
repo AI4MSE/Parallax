@@ -1,5 +1,7 @@
 # Parallax Is All You Need?
 
+[![GitHub stars](https://img.shields.io/github/stars/AI4MSE/Parallax?style=social)](https://github.com/AI4MSE/Parallax)
+
 **他山之石，可以攻玉：如何让你的 AI Agent 真正可靠**
 
 [English Version →](README.md)
@@ -307,6 +309,10 @@ Parallax 不是万能的。有两个边界条件值得坦诚说明：
 [9] Irving, G., Christiano, P., Amodei, D. "AI Safety via Debate." 2018. arXiv:1805.00899
 
 ---
+
+如果觉得有用，点个 ⭐ Star 支持一下，也方便更多人看到。
+
+If this framework helps you, consider giving it a ⭐ — it helps others discover it too.
 
 ## Author
 
