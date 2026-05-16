@@ -1,6 +1,6 @@
 # Parallax Is All You Need?
 
-[![GitHub stars](https://img.shields.io/github/stars/AI4MSE/Parallax?style=social)](https://github.com/AI4MSE/Parallax) **点个 Star 支持一下 · Star ⭐ to support**
+[![GitHub stars](https://img.shields.io/github/stars/AI4MSE/Parallax?style=social)](https://github.com/AI4MSE/Parallax)
 
 **他山之石，可以攻玉：如何让你的 AI Agent 更加可靠**
 
