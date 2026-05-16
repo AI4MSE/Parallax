@@ -179,7 +179,7 @@ Theory covered; now for practice. Here are common AI Agent failure modes, and ho
 
 **Too much or too little.** You ask it to do A, it does ABCD — or delivers half of A and calls it done. → **R-Check**: After completion, have an independent Agent compare output against original requirements item by item. Don't trust "completed."
 
-**Confident hallucinations.** It tells you "no problems, I checked" — but it's all logically self-consistent errors, only reporting good news. → **TDD thinking**: Define "what counts as correct" first (test criteria, acceptance conditions), then let it work. Let external standards constrain output, not let the AI define what "done" means.
+**Confident hallucinations.** It tells you "no problems, I checked" — but it's all logically self-consistent errors, only reporting good news. → **TDD thinking (Red-Green)**: Write the test first, run it, confirm it fails (red), proving the test actually checks something. Then write the implementation to make it pass (green). If you skip "seeing red first," your acceptance criteria is just a rubber stamp that passes anything.
 
 **Gradual drift.** Starts fine, then slowly goes off the rails. → **Phase isolation**: Put strategic thinking and tactical execution in separate contexts. The navigator doesn't walk; the walker doesn't navigate.
 
