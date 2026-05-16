@@ -1,0 +1,30 @@
+# Parallax GitHub 发布 .gitignore
+# 只允许 README.md 和 skills/ 目录被推送
+# 其他所有内容都是内部工作文件，不公开
+
+# 默认排除一切
+*
+
+# 允许目录结构
+!.gitignore
+!README.md
+!skills/
+!skills/**/
+!skills/**/*.md
+!assets/
+!assets/**
+
+# 明确排除的内部文件（双保险）
+research/
+ref/
+pic/
+CORE_CONCEPT.md
+REQUIREMENTS.md
+*.png
+*.jpg
+*.mhtml
+*.pdf
+*.txt
+*.json
+*.bak*
+inbox/
