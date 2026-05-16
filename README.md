@@ -2,7 +2,9 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/AI4MSE/Parallax?style=social)](https://github.com/AI4MSE/Parallax)
 
-**Stones from Other Hills May Serve to Polish Jade (他山之石，可以攻玉) · How to Make Your AI Agent Truly Reliable**
+**Stones from Other Hills May Serve to Polish Jade: How to Make Your AI Agent Truly Reliable**
+
+**他山之石，可以攻玉：如何让你的 AI Agent 真正可靠**
 
 [中文版 →](README_CHS.md)
 
