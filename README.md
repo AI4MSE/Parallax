@@ -1,290 +1,306 @@
-# Parallax Is All You Need
+# Parallax Is All You Need?
 
-**他山之石，可以攻玉：如何让你的 AI Agent 真正可靠**
+**How to Make Your AI Agent Truly Reliable**
+
+[中文版 →](README_CHS.md)
 
 ---
 
+> An AI Agent checking its own work is like a student grading their own homework — they always think it's perfect.
+>
 > AI Agent 自己写完自己检查，就像学生批改自己的作业——永远觉得都对。
 
-**Parallax**（源自希腊语 *parallaxis*：para- 旁边 + allassein 改变——因为站在不同位置，看到了不同的东西）**是一个很简单的道理：先拆开，再找外人看。每一块都找外人看。**
-
-想马上用起来？直接跳到 → [**马上试试**](#马上试试)
-想了解为什么？继续往下读。
-
----
-
-## Agent 架构的第四个维度
-
-<img src="assets/four_dimensions.png" width="100%">
-
-**Model** 让 Agent 能思考。**Tools** 让它能行动。**Harness** 让它跑得稳。
-
-**Parallax 让它做得对。**
-
----
-
-## 为什么需要 Parallax
-
-### 有时好用，有时离谱
-
-用过 AI 编程工具或 AI 助手的人，大概率有过这种体验：有时候它像开了挂，十分钟干完你一天的活；有时候它自信满满地给你一坨看起来很对、仔细一看全是坑的东西。你永远不知道这次拿到的是哪种。
-
-更让人崩溃的是——你有了 AI 助手之后，反而**更累了**。你以为 AI 来帮你干活，结果你变成了它的全职监工：审查它的每一步，修正它的每一个错误，确认它没有跑偏。花在"检查 AI"上的时间，快赶上自己动手了。
-
-这不是你的问题。是架构的问题。
-
-### 自己审自己，审不出来
-
-你肯定有过这种经历：写完一篇文章，反复读了三遍，觉得完美——发给朋友，人家第一眼就挑出了错别字。
-
-AI 也是这样，而且更严重。
-
-2024 年的一项研究在 AI 领域引起了不小的震动：**大语言模型在没有外部反馈的情况下，根本没法可靠地自我纠错** [1]。不仅纠不了，有时候越纠越错——它会把本来对的答案"修正"成错的。后续的大规模调研也确认了这一点 [2]。
-
-反映在实际使用中：2025 年的一项评测显示，当时最强的模型跑超过 4 小时的任务，成功率不到 10% [3]。微软 2026 年的一项研究也发现，多个主流模型在自主执行文件处理等委托任务时，表现会出现退化 [4]。
-
-任务越长越复杂，模型越容易在自己的逻辑里越陷越深——最可怕的是，它完全意识不到。
-
-### 从日心说之争说起
-
-<img src="assets/tycho_bubble.png" width="100%">
-
-天文学史上有一段持续了很久的争论：地球到底是不是宇宙的中心？
-
-日心说——地球绕太阳转——其实很早就被提出了。但反对者有一个关键质疑：如果地球真的在动，我们从轨道这边看一颗星，半年后从另一边看，星的位置应该会有微小偏移（恒星视差）。可是谁也测不到这个偏移。
-
-16 世纪最强的天文观测者第谷·布拉赫认真找了——找不到。于是他设计了一套自己的宇宙模型，在已有观测精度下和日心说的预测几乎无法区分，但地球不用动。数据完美支持，逻辑完美自洽。
-
-**但他是错的。** 真正能分辨两者的信号——恒星视差——比他仪器的检测能力小了将近 200 倍。信号就在那儿，他永远看不到——因为他被**困在了自己的观测气泡里**。
-
-直到 1838 年，Bessel 换了思路：从地球轨道两端——相隔 3 亿公里——看同一颗星，终于捕到了那个微小的偏移 [5]。
-
-同一年，Wheatstone 在完全不同的领域发现了一模一样的道理：人能感知深度，是因为两只眼睛从不同位置看到了不同的画面 [6]。
-
-**两个领域，同一年，同一个发现：深度来自不同位置的观测差异。一个观测点永远不够。**
-
-教训很清楚：第谷不蠢，数据也没问题。**在同一个参考系内部，自洽的错误和自洽的真理看起来一模一样。只有引入外部观测点，才能分辨。**
-
-### 回到 AI Agent
-
-今天主流的 Agent 架构通常被描述为三层：**Model**（推理引擎）+ **Tools**（行动能力）+ **Harness**（执行脚手架：重试、状态管理、上下文维护、工具调度、流程编排）。这三层让 Agent 越来越强大。
-
-很多人也已经在实践各种形式的"独立审查"——代码 review agent、多轮验证、独立测试。这些做法是有效的。
-
-Parallax 是一个基于我们实践总结的初步体系，供大家参考。
-
-苏轼在近一千年前就说透了：
-
-> **横看成岭侧成峰，远近高低各不同。**
-> **不识庐山真面目，只缘身在此山中。**
-
----
-
-## Parallax 的两个核心洞见
-
-<img src="assets/core_insights.png" width="100%">
-
-### 他山之石，可以攻玉
-
-这句话出自《诗经》，大约三千年前的中国人就总结出来了。朱熹的注解说得最透：
-
-> **两玉相磨不可以成器，以石磨之，然后玉之为器，得以成焉。**
-
-玉不能拿玉来磨——同种材料之间磨不出什么。你得找别的山上的石头，才能把玉雕成器。
-
-翻译成 AI 的语言：**一个 Agent 不应该只靠自己审自己。** 每一次关键验证，都值得引入一个跟执行者无关的独立视角。在同一个上下文里做自我反思，往往就是拿玉磨玉——外表光滑，内里空洞。
-
-机器学习里有个经典的理论模型描述了这件事。2014 年 Goodfellow 等人提出 GAN（生成对抗网络）[7]，打了个比方：
-
-> 一边是伪钞制造者，一边是警察。造假的想以假乱真，查假的想把假钞挑出来。
-
-**伪钞贩子独自工作的时候，没有动力精益求精。** 只有当警察介入，两者形成对抗，假钞的质量才会不断逼近真钞——因为不进步就会被抓。
-
-AI Agent 也是这个道理。干活的全力往前冲（"怎么做"），审的独立往回拉（"对不对"），拉扯之间才逼近真相。当然，拉扯也不能没完没了——好的 Parallax 设计要在"充分质疑"和"高效收敛"之间找到平衡。
-
-这个道理在中国古典智慧中反复出现，各种说法，同一个意思：
-
-| 出处 | 原文 | 白话 |
-|------|------|------|
-| 《诗经》 | 他山之石，可以攻玉 | 外面的石头才能磨出好玉 |
-| 苏轼 | 不识庐山真面目，只缘身在此山中 | 站在山里看不到山 |
-| 《旧唐书》 | 当局者迷，旁观者清 | 下棋的不如看棋的 |
-| 魏征 | 兼听则明，偏信则暗 | 多听才明白，偏信就糊涂 |
-| 《孙子兵法》 | 知彼知己，百战不殆 | 光知道自己还不够 |
-
-不同时代，不同人，同一个认识论结论：**认知的深度来自视角的差异。**
-
-### 化整为零，分而治之
-
-光有外部视角还不够。
-
-想象一个审计师，面前堆着一家公司全年所有部门的财务流水——几十万条记录。再厉害的审计师也会迷失。但如果按月拆开、按部门分、按科目归类，每一块的审查就变得可控。
-
-AI 面临的挑战更大。当前模型存在一些已知的结构性限制，包括但不限于：
-- **上下文有限**：不可能把所有信息塞进一次对话
-- **注意力稀释**：上下文越长，对细节的把握越差
-- **角色容易串戏**：在同一个会话里同时当执行者和审查者，两种角色容易互相干扰
-
-这些限制意味着，把复杂任务拆解开来不仅是"更好"，很多时候是"必须"。Parallax 建议至少从以下几个方向考虑拆解：
-
-**时间上拆**：别等到最后才检查。动手前审计计划（B-Check），做完后对照结果（R-Check），过程中也持续校准。1976 年 IBM 的 Fagan 发现：细粒度代码检查能抓住 80-90% 的缺陷 [8]。检查的频率往往比单次检查的深度更重要。
-
-**空间上拆**：执行者和验证者不能共享上下文和记忆。验证者一旦能看到执行者的全部思考过程，就不再是"旁观者"了——变成了"当局者"。"旁观者清"的前提是你真的站在旁边，不是坐在牌桌上。
-
-**架构上拆**：战略和战术最好分家。"我们的目标是什么"和"这行代码该怎么改"放在同一个对话里讨论，容易互相干扰——战术细节的焦虑会模糊战略判断，战略的宏观模糊会让战术无从下手。
-
-当然，拆解的维度远不止这些。不同场景下可能有不同的拆法，这里只是几个最常见的方向。
-
-用一个更直觉的比方：这就像微积分。一条弯曲的曲线，你只在两头各量一个大矩形，误差能大到离谱。但如果切成很多小区间，每个都量一下，加起来就越来越接近真实面积。Parallax 也是一样——把长任务切成小段，每段都做独立视差校验，小误差就地清零，不给它滚成大雪球的机会。
-
-### 两个洞见的关系
-
-第一个洞见管"**谁来看**"——必须是外人。
-第二个洞见管"**怎么看得清**"——必须拆开。
-
-缺一个都不行：
-- 有外人但不拆 = 面对一团浆糊，外人也看不清
-- 拆了但没外人 = 每块还是自己审自己，白拆
+**Parallax** (from Greek *parallaxis*: para- "beside" + allassein "to change" — you see things differently because you're standing in a different place) **is a simple idea: break it down, then have someone else look. Have someone else look at every piece.**
 
 **先拆开，再找外人看。每一块都找外人看。**
 
----
-
-## 工程实践
-
-说完道理，说实操。下面是 AI Agent 常见的几种翻车方式，以及 Parallax 怎么应对：
-
-**方向搞错了。** AI 在自己的逻辑里自嗨，计划越做越偏，自己还觉得很有道理。→ **B-Check**：动手之前，让独立 Agent 审你的计划。源头就掐住。
-
-**做多了或做少了。** 你让它做 A，它顺手把 BCD 也做了——或者只做了半个 A 就告诉你完事了。→ **R-Check**：做完之后，让独立 Agent 拿着你的原始需求逐条对。别信它说的"已完成"。
-
-**信誓旦旦全是幻觉。** 它告诉你"没问题，我检查过了"——其实全是逻辑自洽的错误，报喜不报忧。→ **TDD 思维**：先定义"什么算对"（测试标准、验收条件），再让它干活。让外部标准约束它的输出，别让它自己定义什么叫"完成了"。
-
-**越跑越偏。** 一开始还挺靠谱，做着做着就跑飞了。→ **相位隔离**：把战略思考和战术执行放在不同的上下文里。看路的人不走路，走路的人不看路。
-
-**有了 AI 反而更累。** 你变成了它的全职质检员，比自己干还费劲。→ **Parallax 自动化**：把"检查"也交给独立 Agent，串成自动化流水线。你只在关键决策点介入。
-
-这些只是 Parallax 思想在特定场景下的体现，远不是全部。核心就一句话：**找一个站在不同位置的人帮你看一眼。** 具体怎么做，取决于你的场景。
-
-这个思路并不是全新的。2018 年 Irving 等人就从 AI 安全角度提出过类似洞见：让两个 AI 辩论，人类做裁判——"撒谎比揭穿谎言更难" [9]。Parallax 尝试把这类洞见整合成一个可操作的工程框架。
+Want to start right now? Jump to → [**Try It**](#try-it)
+Want to understand why? Keep reading.
 
 ---
 
-## 走向自动化：Parallax Loop
+## The Fourth Dimension of Agent Architecture
 
-上面说的这些，如果每次都要人来协调，那只是把"监工 AI"变成了"监工审查流程"——换汤不换药。
+<img src="assets/four_dimensions.png" width="100%">
 
-Parallax 真正的使用价值在于：**它可以编排成一个完整的自动化闭环。**
+**Model** lets the Agent think. **Tools** let it act. **Harness** keeps it running.
+**Parallax makes sure it gets things right.**
+
+Model 让 Agent 能思考。Tools 让它能行动。Harness 让它跑得稳。**Parallax 让它做得对。**
+
+---
+
+## Why You Need Parallax
+
+### Sometimes Brilliant, Sometimes Terrible
+
+If you've used AI coding tools or AI assistants, you've probably experienced this: sometimes it's superhuman, knocking out a day's work in ten minutes; other times it confidently hands you something that looks right but falls apart on closer inspection. You never know which one you're getting.
+
+What's even more frustrating — after getting an AI assistant, you're actually **more exhausted**. You thought AI would do the work for you, but instead you've become its full-time supervisor: reviewing every step, fixing every mistake, making sure it hasn't gone off track. The time you spend "checking the AI" is almost as much as doing it yourself.
+
+This isn't your fault. It's an architecture problem.
+
+### Self-Review Doesn't Work
+
+You've definitely had this experience: you finish writing something, read it three times, think it's perfect — send it to a friend, and they spot a typo in the first glance.
+
+AI has the same problem, only worse.
+
+A 2024 study sent shockwaves through the AI field: **large language models cannot reliably self-correct reasoning without external feedback** [1]. Not only can't they fix errors — sometimes they make things worse, "correcting" a right answer into a wrong one. A comprehensive follow-up survey confirmed this [2].
+
+In practice: a 2025 evaluation showed that the strongest models at the time had less than 10% success rate on tasks longer than 4 hours [3]. A 2026 Microsoft study found that multiple mainstream models showed degraded performance when autonomously handling delegated tasks [4].
+
+The longer and more complex the task, the deeper the model sinks into its own logic — and the scariest part is, it has no idea.
+
+### A Lesson from the Heliocentric Debate
+
+<img src="assets/tycho_bubble.png" width="100%">
+
+There was a long-running debate in the history of astronomy: is Earth really the center of the universe?
+
+The heliocentric model — Earth orbits the Sun — was proposed quite early. But opponents had a key challenge: if Earth is really moving, observing a star from one side of the orbit and then from the other side six months later should show a tiny shift (stellar parallax). Nobody could detect it.
+
+The strongest observational astronomer of the 16th century, Tycho Brahe, searched carefully — and found nothing. So he designed his own model of the universe, one that was virtually indistinguishable from the heliocentric model at the available precision, but with Earth staying still. Data supported it perfectly. Logic was perfectly self-consistent.
+
+**But he was wrong.** The signal that could distinguish the two — stellar parallax — was nearly 200 times smaller than what his instruments could detect. The signal was right there; he just couldn't see it — because he was **trapped inside his own observational bubble**.
+
+It wasn't until 1838 that Bessel tried a different approach: observing the same star from both ends of Earth's orbit — 300 million kilometers apart — and finally caught that tiny shift [5].
+
+That same year, Wheatstone discovered the exact same principle in a completely different field: humans perceive depth because two eyes see slightly different images from slightly different positions [6].
+
+**Two fields, same year, same discovery: depth comes from observational differences between different positions. One observation point is never enough.**
+
+The lesson is clear: Tycho wasn't stupid, and his data was fine. **Inside the same frame of reference, a self-consistent error looks exactly like a self-consistent truth. Only by introducing an external observation point can you tell them apart.**
+
+### Back to AI Agents
+
+The mainstream Agent architecture is typically described as three layers: **Model** (reasoning engine) + **Tools** (action capabilities) + **Harness** (execution scaffolding: retries, state management, context maintenance, tool dispatch, workflow orchestration). These three layers have made Agents increasingly powerful.
+
+Many people are already practicing various forms of "independent review" — code review agents, multi-round verification, independent testing. These practices work.
+
+Parallax is a preliminary framework based on our practice, offered as a reference for the community.
+
+As the Song dynasty poet Su Shi wrote nearly a thousand years ago:
+
+> **横看成岭侧成峰，远近高低各不同。**
+> **不识庐山真面目，只缘身在此山中。**
+>
+> *Viewed from the side, a ridge; from the end, a peak — different from every angle.*
+> *You can't see Mount Lu's true face when you're standing on it.*
+
+---
+
+## Two Core Insights of Parallax
+
+<img src="assets/core_insights.png" width="100%">
+
+### Stones from Other Mountains Polish Jade (他山之石，可以攻玉)
+
+This phrase comes from the *Book of Songs* (《诗经》), summarized by the Chinese roughly three thousand years ago. The commentator Zhu Xi put it best:
+
+> **两玉相磨不可以成器，以石磨之，然后玉之为器，得以成焉。**
+>
+> *Two pieces of jade rubbing against each other cannot produce a finished vessel. Only by grinding with stone can jade become a vessel.*
+
+You can't polish jade with jade — same material, not enough friction. You need stone from a different mountain.
+
+In AI terms: **an Agent shouldn't rely solely on reviewing itself.** Every critical verification deserves an independent perspective unrelated to the executor. Self-reflection within the same context is often just polishing a bubble — smooth on the outside, hollow within.
+
+Machine learning has a classic theoretical model for this. When Goodfellow et al. proposed GANs (Generative Adversarial Networks) in 2014 [7], they used a vivid analogy:
+
+> One side is a counterfeiter, the other is the police. The counterfeiter wants to make perfect fakes; the police want to catch them.
+
+**A counterfeiter working alone has no incentive to improve.** Only when the police (an independent agent with opposing goals) enter the picture does the quality of counterfeits approach the real thing — because standing still means getting caught.
+
+AI Agents work the same way. The executor pushes forward ("how to do it"), the reviewer independently pulls back ("is it right?"), and truth emerges from the friction between them. Of course, friction can't go on forever — good Parallax design balances "thorough challenge" with "efficient convergence."
+
+This insight appears repeatedly across Chinese classical wisdom, in different words but with the same meaning:
+
+| Source | Original | Meaning |
+|--------|----------|---------|
+| *Book of Songs* | 他山之石，可以攻玉 | Only external stone can polish jade |
+| Su Shi | 不识庐山真面目，只缘身在此山中 | Can't see the mountain from inside it |
+| *Old Book of Tang* | 当局者迷，旁观者清 | The player is confused; the spectator sees clearly |
+| Wei Zheng | 兼听则明，偏信则暗 | Listen to many and be wise; trust one and be blind |
+| *Art of War* | 知彼知己，百战不殆 | Know yourself alone and you're not enough |
+
+Different eras, different people, same epistemological conclusion: **depth of understanding comes from difference of perspective.**
+
+### Divide and Conquer (分而治之)
+
+An external perspective alone isn't enough.
+
+Imagine an auditor facing a company's entire annual financial records from every department — hundreds of thousands of entries. Even the best auditor would get lost. But break it down by month, by department, by account category, and each piece becomes manageable.
+
+AI faces even bigger challenges. Current models have known structural limitations, including but not limited to:
+- **Limited context**: you can't fit everything into one conversation
+- **Attention dilution**: the longer the context, the worse the grip on details
+- **Role contamination**: acting as both executor and reviewer in the same session causes interference
+
+These limitations mean that decomposing complex tasks isn't just "better" — it's often "necessary." Parallax suggests considering decomposition along at least these dimensions:
+
+**Temporal decomposition**: Don't wait until the end to check. Audit the plan before execution (B-Check), verify results after (R-Check), and calibrate throughout. In 1976, IBM's Fagan found that fine-grained code inspections catch 80-90% of defects [8]. Frequency of checking often matters more than depth.
+
+**Spatial decomposition (context isolation)**: Executor and reviewer must not share context and memory. Once a reviewer can see the executor's entire thought process, they stop being a "spectator" — they become a "player." Seeing clearly requires actually standing on the sidelines, not sitting at the table.
+
+**Architectural decomposition**: Strategy and tactics should be separated. Discussing "what's our goal" and "how should this line of code change" in the same conversation invites interference — tactical anxiety blurs strategic judgment, and strategic vagueness paralyzes tactical execution.
+
+The dimensions of decomposition go well beyond these — different scenarios may call for different approaches.
+
+A more intuitive analogy: think of calculus. A curved line approximated by just two rectangles at the endpoints gives a huge error. But slice it into many tiny intervals, measure each one, and the sum gets closer and closer to the true area. Parallax works the same way — slice long tasks into small segments, verify each independently, clear small errors on the spot, and don't let them snowball.
+
+### How the Two Insights Relate
+
+The first insight addresses "**who looks**" — must be an outsider.
+The second insight addresses "**how to see clearly**" — must be broken down.
+
+Neither works alone:
+- Outsider without decomposition = facing a tangled mess, can't see clearly
+- Decomposition without outsider = each piece still reviewed by itself, blind spots remain
+
+**Break it down, then have someone else look. Have someone else look at every piece.**
+
+---
+
+## Engineering Practice
+
+Theory covered; now for practice. Here are common AI Agent failure modes, and how Parallax addresses them:
+
+**Wrong direction.** The AI gets lost in its own logic, plans veering further off course while it thinks everything's great. → **B-Check**: Before starting, have an independent Agent audit your plan. Catch it at the source.
+
+**Too much or too little.** You ask it to do A, it does ABCD — or delivers half of A and calls it done. → **R-Check**: After completion, have an independent Agent compare output against original requirements item by item. Don't trust "completed."
+
+**Confident hallucinations.** It tells you "no problems, I checked" — but it's all logically self-consistent errors, only reporting good news. → **TDD thinking**: Define "what counts as correct" first (test criteria, acceptance conditions), then let it work. Let external standards constrain output, not let the AI define what "done" means.
+
+**Gradual drift.** Starts fine, then slowly goes off the rails. → **Phase isolation**: Put strategic thinking and tactical execution in separate contexts. The navigator doesn't walk; the walker doesn't navigate.
+
+**AI makes you more tired.** You've become its full-time quality inspector — more exhausting than doing it yourself. → **Parallax automation**: Delegate "checking" to independent Agents too, wired into an automated pipeline. You only step in at key decision points.
+
+These are just manifestations of the Parallax idea in specific scenarios — far from the whole picture. The core is one sentence: **find someone standing in a different position to take a look.** How and when, depends on your scenario.
+
+This isn't an entirely new idea. In 2018, Irving et al. proposed a similar insight from an AI safety angle: have two AIs debate while a human judges — "lying is harder than refuting a lie" [9]. Parallax tries to integrate such insights into an actionable engineering framework.
+
+---
+
+## Toward Automation: The Parallax Loop
+
+If every review step requires human coordination, you've just replaced "supervising AI" with "supervising the review process" — same problem, different wrapper.
+
+The real value of Parallax: **it can be orchestrated into a fully automated loop.**
 
 <img src="assets/parallax_loop.png" width="100%">
 
-一个完整的 Parallax Loop 大致分为这几个阶段，每个阶段都有对应的独立审查：
+A complete Parallax Loop roughly breaks into these stages, each with its own independent review:
 
 ```
-人类输入需求/问题
+Human inputs requirements/problem
   ↓
 ┌──────────────────────────────────────────┐
-│  分析阶段                                 │
-│  理解问题 → 调研根因 → 形成结论            │
-│  → B-Check：独立审查分析是否靠谱           │
-│  ↻ 不通过就打回重新分析                    │
+│  Analysis Stage                           │
+│  Understand problem → Research → Conclude │
+│  → B-Check: Independent review            │
+│  ↻ Fail → send back for re-analysis      │
 └──────────────────┬───────────────────────┘
                    ↓
 ┌──────────────────────────────────────────┐
-│  计划阶段                                 │
-│  制定方案 → 拆解子任务 → 定义验收标准       │
-│  → P-Check：独立审查计划是否合理            │
-│  ↻ 不通过就打回重新规划                    │
+│  Planning Stage                           │
+│  Design approach → Decompose → Define     │
+│  acceptance criteria                      │
+│  → P-Check: Independent review            │
+│  ↻ Fail → send back for re-planning      │
 └──────────────────┬───────────────────────┘
                    ↓
 ┌──────────────────────────────────────────┐
-│  执行阶段（每个子任务，干净上下文）          │
-│  执行 Agent → 完成子任务                   │
-│  → D-Check：独立审查交付物是否符合计划       │
-│  ↻ 不通过就打回重做                        │
+│  Execution Stage (each subtask, clean     │
+│  context)                                 │
+│  Executor Agent → Complete subtask        │
+│  → D-Check: Independent delivery review   │
+│  ↻ Fail → send back for rework           │
 └──────────────────┬───────────────────────┘
                    ↓
 ┌──────────────────────────────────────────┐
-│  验收阶段                                 │
-│  汇总所有子任务 → 端到端验证                │
-│  → R-Check：独立对照最终产出与原始需求       │
+│  Acceptance Stage                         │
+│  Aggregate all subtasks → End-to-end      │
+│  verification                             │
+│  → R-Check: Compare final output against  │
+│  original requirements                    │
 └──────────────────┬───────────────────────┘
                    ↓
-              最终交付 → 人类
+              Final delivery → Human
 ```
 
-每一步都遵循同一个原则：**干活的和检查的不是同一个人，上下文互相隔离。**
+Every step follows the same principle: **the one doing the work and the one checking are different entities, with isolated contexts.**
 
-注意几个关键的实践要点：
+A few key practice points:
 
-- **每个阶段有自己的审查，不能混。** 审分析的时候不讨论实现，审计划的时候不回头改分析，审结果的时候不重新做计划。混在一起等于又回到了"一锅炖"。
-- **每个子任务用干净的上下文。** 不管是启动一个新的 sub-agent、开一个新会话、还是其他等效的隔离方式——关键是执行者不带着上一个任务的"记忆残留"。上下文污染是长程任务漂移的主要来源之一。
-- **战略和战术分开讨论。** "我们要解决什么问题"和"这行代码怎么改"不能放在同一个上下文里。混在一起，战略会被战术细节淹没，战术又因为战略模糊无从下手。
+- **Each stage has its own review — don't mix.** When reviewing analysis, don't discuss implementation. When reviewing plans, don't revise the analysis. When reviewing results, don't redo the plan. Mixing = back to square one.
+- **Each subtask uses a clean context.** Whether it's a new sub-agent, a new session, or any equivalent isolation — the key is that the executor doesn't carry "memory residue" from the previous task. Context pollution is a primary source of drift in long-running tasks.
+- **Separate strategy from tactics.** "What problem are we solving" and "how should this line change" shouldn't share a context. Mixed together, strategy drowns in tactical details, and tactics flounder without clear strategy.
 
-上面画的是一个基于 Parallax 的流程示范，实际使用中可以更加复杂，也可以大幅简化。简单任务可能只需要一个 B-Check 就够了；复杂的长程项目可以走完全流程甚至扩展更多环节。**Parallax 不是一刀切的规定，是一个可以灵活组装的框架。**
+The above is a demonstration of a Parallax-based process — in practice it can be more complex or much simpler. A simple task might only need one B-Check; a complex long-running project might use the full flow or extend further. **Parallax isn't a rigid prescription — it's a flexible assembly kit.**
 
-**不管你的场景是什么——写代码、做调研、写文章、管项目——只要把 Parallax 的两个核心洞见嵌进关键环节，你就在跑自己的 Parallax Loop。**
-
----
-
-## 马上试试
-
-看到这里，你可能想说："道理我都懂了，怎么上手？"
-
-最快的方式：下载下面两个技能，导入你的 Agent 工作流，直接开跑。
-
-**[B-Check](skills/bcheck/chs/SKILL.md)** —— 通用独立审查。不管是计划、方案、分析、代码还是文档——任何你觉得需要第二双眼睛看一看的东西，都可以丢给它。它的态度很凶，专挑你不想面对的问题。在完整的 Parallax Loop 里，分析阶段用 B-Check，计划阶段有专门的 P-Check（更侧重方案可行性和拆解合理性）；单独用的话，B-Check 就是一个通用的"找外人看一眼"工具。
-
-**[R-Check](skills/rcheck/chs/SKILL.md)** —— 事后结果验证。做完之后，让一个独立 Agent 拿你的原始需求逐条对照产出。它不管你过程多辛苦，只看结果对不对。
-
-这两个技能只是 Parallax 的起点。正如上面 Parallax Loop 流程图所示，完整的体系覆盖从分析、计划、执行到验收的每一个阶段——B-Check（事前审查）、P-Check（计划审查）、D-Check（交付审查）、R-Check（结果验收）等等<sup>[*](#xcheck)</sup>。B-Check 和 R-Check 是其中最通用、最容易上手的两块积木，你可以用它们搭出属于自己的 Parallax Loop。
-
-<a name="xcheck"></a>
-> **\* 关于 X-Check：** 上面提到的 B-Check、P-Check、D-Check、R-Check 等，在实现上不一定是完全不同的技能——它们可能共享同一套核心审查机制，只是针对不同阶段调整了 prompt 和关注点。你也完全可以不用独立技能来实现，而是通过 Agent 之间的通信协议（如 MCP、A2A 等）让 Agent 在协作过程中自然地完成互相审查。Parallax 定义的是"什么时候需要独立视角"和"视角之间怎么隔离"，具体用什么技术手段来实现，取决于你的架构。
-
-几个使用上的建议：
-
-- **打分和轮次限制。** 每一轮审查可以设置一个打分体系（比如 1-5 分），达到阈值才通过，同时设定最大轮次（比如 3 轮）防止无限循环。这其实和 GAN 的思路一样——对抗要收敛，不能没完没了。具体的评分标准可以根据你的场景自己定，我们在技能里提供了一些参考。
-- **尽量用不同家族的模型做审查。** 如果执行用的是 A 模型，审查尽量用 B 模型——不同的训练数据和偏好会产生更大的认知视差。当然，即使用同一家族的模型，只要在审查 prompt 里加入明确的"反趋同声明"（anti-sycophancy statement），实践中效果也不错。关键是角色和目标的分离，不只是模型的分离。
-- **TDD 思维：先看到失败，再看到成功。** 这是软件工程里一个经典但常被忽略的智慧——先写测试，跑一遍确认它会失败（证明测试是有效的），然后再写实现让它通过。对 AI Agent 也一样：先定义"什么算对"的外部标准，确认当前产出确实不满足这个标准，然后再让 Agent 去修。如果你跳过"先看到失败"这一步，你永远不知道你的验收标准是不是橡皮图章。
-
-如果看完这些你还是不确定从哪开始——记住一件事就行：**凡是你觉得不太确定、不太靠谱的东西，B-Check 一下。** 就这么简单。
-
-> **写的不审，审的不写。**
+**Whatever your scenario — coding, research, writing, project management — embed Parallax's two core insights into key stages, and you're running your own Parallax Loop.**
 
 ---
 
-## 边界与局限
+## Try It
 
-Parallax 不是万能的。有两个边界条件值得坦诚说明：
+You've read this far and might be thinking: "I get the idea. How do I start?"
 
-**能力天花板**：如果干活的和审查的共享同一个能力盲区（比如两个 AI 都不懂密码学），那视角再独立，认知视差也是零。就像两个近视的人互相检查远处的路牌——独立性解决不了能力问题。这时候需要引入异构视角：换个模型、用专业工具、或者拉个人类专家。
+Fastest way: download these two skills, plug them into your Agent workflow, and go.
 
-**原点本身有误**：Parallax 管的是"你做的对不对"，不管"你该不该做这个"。如果需求或目标本身就是错的，整个循环会在错误的方向上精确运转——跟第谷一样，观测精度极高，但参考系本身就不对。解决办法是对需求本身也做 Parallax（让独立视角审需求），但这是上游问题。
+**[B-Check](skills/bcheck/eng/SKILL.md)** — General-purpose independent review. Plans, proposals, analyses, code, documents — anything you want a second pair of eyes on. It's deliberately tough, looking for problems you'd rather not face. In a full Parallax Loop, the analysis stage uses B-Check, and the planning stage has a dedicated P-Check (focused on feasibility and decomposition quality); used standalone, B-Check is simply a universal "get someone else to look" tool.
 
----
+**[R-Check](skills/rcheck/eng/SKILL.md)** — Post-completion result verification. After the work is done, an independent Agent compares output against original requirements, item by item. It doesn't care how hard you worked — only whether the result matches what was asked.
 
-## 常见问题
+These two skills are just the starting point. As the Parallax Loop diagram above shows, the full framework covers every stage from analysis to planning, execution, and acceptance — B-Check, P-Check (plan review), D-Check (delivery review), R-Check, and more<sup>[*](#xcheck-en)</sup>. B-Check and R-Check are the most versatile, easiest-to-start building blocks — use them to assemble your own Parallax Loop.
 
-**Parallax 和 Multi-Agent 系统是一回事吗？**
+<a name="xcheck-en"></a>
+> **\* About X-Check:** The B-Check, P-Check, D-Check, R-Check mentioned above don't have to be entirely different skills — they may share a core review mechanism, just tuned for different stages. You can also skip standalone skills entirely and implement reviews through Agent communication protocols (like MCP, A2A, etc.), letting Agents naturally review each other during collaboration. Parallax defines "when you need an independent perspective" and "how to isolate perspectives" — the specific technical means are up to your architecture.
 
-不是。Multi-Agent 是技术手段，Parallax 是原则。你可以用多个 Agent 来落地 Parallax，但"多 Agent"不等于"有视差"。两个共享一切上下文和思路的 Agent，就像把同一个人的左眼画面复制到右眼——看到的还是平面。
+A few practical tips:
 
-**这不就是代码 review 吗？**
+- **Scoring and round limits.** Each review round can have a scoring system (e.g., 1-5), passing only above a threshold, with a maximum number of rounds (e.g., 3) to prevent infinite loops. This mirrors the GAN philosophy — adversarial dynamics must converge, not cycle endlessly. Design your scoring criteria for your scenario; our skills include some reference examples.
+- **Use different model families for review when possible.** If execution uses Model A, try to review with Model B — different training data and biases produce greater cognitive parallax. That said, even same-family models work well if you include an explicit "anti-sycophancy statement" in the review prompt. The key is separating roles and goals, not just models.
+- **TDD thinking: see it fail before you see it succeed.** A classic but often overlooked software engineering wisdom — write the test first, run it to confirm it fails (proving the test is valid), then write the implementation to make it pass. Same for AI Agents: define the external standard for "what counts as correct," confirm that current output fails that standard, then let the Agent fix it. Skip "seeing it fail first" and you'll never know if your acceptance criteria is just a rubber stamp.
 
-代码 review 是 Parallax 的一个经典实例。但 Parallax 把"独立视角"从一种最佳实践提升为架构原则，并且在时间、空间、架构等方向上系统化部署。代码 review 只是其中一个场景。
+If after all this you're still not sure where to start — just remember one thing: **anything you feel uncertain or shaky about, B-Check it.** That's it.
 
-**多一个 Agent 审查，不是更贵更慢吗？**
-
-是的，有成本。但不审查的成本呢？一个 4 小时的任务跑完发现方向全错，浪费的 token 和时间远超事前 10 分钟的 B-Check。Parallax 不是所有任务都要用——**任务越复杂、越长、风险越高，越值得。** 简单任务直接跑就行。
-
-**AI 检查 AI，靠谱吗？**
-
-关键在于认知原点的独立性。独立 Agent 有不同的 prompt、不同的角色、不同的目标方向（干活的想完成任务，审的想找出毛病），这些结构性差异创造了真正的认知视差。当然，如果两个 Agent 共享同样的能力盲区，Parallax 也救不了——参见[边界与局限](#边界与局限)。
+> **Those who write don't review. Those who review don't write.**
 
 ---
 
-## 引用
+## Boundaries and Limitations
+
+Parallax isn't a silver bullet. Two known boundary conditions worth stating honestly:
+
+**Capability ceiling**: If both the executor and reviewer share the same blind spot (e.g., neither AI understands cryptography), cognitive parallax is zero regardless of how independent the perspectives are. Like two nearsighted people checking each other's view of a distant road sign — independence doesn't solve a capability problem. The solution: introduce heterogeneous perspectives — different models, specialized tools, or human experts.
+
+**Wrong starting point**: Parallax governs "are you doing it right," not "should you be doing this at all." If the requirements themselves are wrong, the entire loop runs precisely in the wrong direction — just like Tycho, whose observations were extremely precise, but whose frame of reference was off. The solution: recursively apply Parallax to the requirements process (have independent eyes review the requirements themselves), but this is an upstream problem.
+
+---
+
+## FAQ
+
+**Is Parallax the same as Multi-Agent systems?**
+
+No. Multi-Agent is a technical means; Parallax is a principle. You can use multiple Agents to implement Parallax, but "more Agents" doesn't equal "parallax." Two Agents sharing the same context and thinking patterns are like copying one person's left-eye image to the right eye — still flat.
+
+**Isn't this just code review?**
+
+Code review is a classic instance of Parallax thinking. But Parallax elevates "independent perspective" from a best practice to an architectural principle, systematically deployed across temporal, spatial, and architectural dimensions. Code review is just one scenario.
+
+**Doesn't an extra reviewing Agent cost more and take longer?**
+
+Yes, there's a cost. But what's the cost of *not* reviewing? A 4-hour task that ends up going in the wrong direction wastes far more tokens and time than a 10-minute B-Check upfront. Parallax isn't for every task — **the more complex, the longer, the higher the risk, the more it's worth it.** Simple tasks? Just run them.
+
+**Can AI reliably check AI?**
+
+The key is independence of cognitive origin. An independent Agent has a different prompt, different role, different goal orientation (the executor wants to finish; the reviewer wants to find problems). These structural differences create genuine cognitive parallax. Of course, if both Agents share the same capability blind spots, Parallax can't help — see [Boundaries and Limitations](#boundaries-and-limitations).
+
+---
+
+## References
 
 [1] Huang, J., et al. "Large Language Models Cannot Self-Correct Reasoning Yet." *ICLR 2024*. arXiv:2310.01798
 
@@ -313,6 +329,6 @@ Parallax 不是万能的。有两个边界条件值得坦诚说明：
 ---
 
 <p align="center">
-  <strong>Parallax Is All You Need</strong><br>
+  <strong>Parallax Is All You Need?</strong><br>
   他山之石，可以攻玉
 </p>
