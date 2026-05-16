@@ -1,6 +1,6 @@
 # Parallax Is All You Need?
 
-**How to Make Your AI Agent Truly Reliable**
+**How to Make Your AI Agent Truly Reliable · 如何让你的 AI Agent 真正可靠**
 
 [中文版 →](README_CHS.md)
 
@@ -10,16 +10,21 @@
 >
 > AI Agent 自己写完自己检查，就像学生批改自己的作业——永远觉得都对。
 
-**Parallax** — literally "apparent shift in position when viewed from different angles" (from Greek *parallaxis*: para- "beside" + allassein "to change") **is a simple idea: break it down, then have someone else look. Have someone else look at every piece.**
+**Parallax** — literally "apparent shift in position when viewed from different angles" · 直译"视差"，从不同角度看同一个东西时产生的位置偏移
+
+(from Greek *parallaxis*: para- "beside" + allassein "to change")
+
+**A simple idea: break it down, then have someone else look. Have someone else look at every piece.**
 
 **先拆开，再找外人看。每一块都找外人看。**
 
-Want to start right now? Jump to → [**Try It**](#try-it)
-Want to understand why? Keep reading.
+Want to start right now? Jump to → [**Try It**](#try-it) · 想马上用？跳到 → [**马上试试**](#try-it)
+
+Want to understand why? Keep reading. · 想了解为什么？继续往下读。
 
 ---
 
-## The Fourth Dimension of Agent Architecture
+## The Fourth Dimension of Agent Architecture · Agent 架构的第四个维度
 
 <img src="assets/four_dimensions.png" width="100%">
 
