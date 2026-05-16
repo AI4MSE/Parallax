@@ -2,7 +2,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/AI4MSE/Parallax?style=social)](https://github.com/AI4MSE/Parallax)
 
-**Stones from Other Mountains Polish Jade (他山之石，可以攻玉) · How to Make Your AI Agent Truly Reliable**
+**Stones from Other Hills May Serve to Polish Jade (他山之石，可以攻玉) · How to Make Your AI Agent Truly Reliable**
 
 [中文版 →](README_CHS.md)
 
@@ -101,7 +101,7 @@ As the Song dynasty poet Su Shi wrote nearly a thousand years ago:
 
 <img src="assets/core_insights.png" width="100%">
 
-### Stones from Other Mountains Polish Jade (他山之石，可以攻玉)
+### Stones from Other Hills May Serve to Polish Jade (他山之石，可以攻玉)
 
 This phrase comes from the *Book of Songs* (《诗经》), compiled in China roughly three thousand years ago. The commentator Zhu Xi put it best:
 
