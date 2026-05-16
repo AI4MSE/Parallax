@@ -4,7 +4,7 @@
 
 **Stones from Other Hills May Serve to Polish Jade: How to Make Your AI Agent Truly Reliable**
 
-**他山之石，可以攻玉：如何让你的 AI Agent 真正可靠**
+**他山之石，可以攻玉：如何让你的 AI Agent 更加可靠**
 
 [中文版 →](README_CHS.md)
 

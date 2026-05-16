@@ -2,7 +2,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/AI4MSE/Parallax?style=social)](https://github.com/AI4MSE/Parallax)
 
-**他山之石，可以攻玉：如何让你的 AI Agent 真正可靠**
+**他山之石，可以攻玉：如何让你的 AI Agent 更加可靠**
 
 [English Version →](README.md)
 
