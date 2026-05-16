@@ -331,7 +331,7 @@ The key is independence of cognitive origin. An independent Agent has a differen
 
 ---
 
-If this framework helps you, give it a star — it helps others discover it too. · 如果觉得有用，点个 Star 支持一下，也方便更多人看到。
+If anything helps you, give it a star — it helps others discover it too. · 如果觉得有用，点个 Star 支持一下，也方便更多人看到。
 
 [![GitHub stars](https://img.shields.io/github/stars/AI4MSE/Parallax?style=social)](https://github.com/AI4MSE/Parallax)
 
