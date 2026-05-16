@@ -2,7 +2,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/AI4MSE/Parallax?style=social)](https://github.com/AI4MSE/Parallax)
 
-**How to Make Your AI Agent Truly Reliable · 如何让你的 AI Agent 真正可靠**
+**Stones from Other Mountains Polish Jade (他山之石，可以攻玉) · How to Make Your AI Agent Truly Reliable**
 
 [中文版 →](README_CHS.md)
 
